@@ -1,0 +1,21 @@
+
+.upload {
+	margin: 10px;
+}
+
+.messages {
+	display: block;
+	height: 40px;
+	width: 100px;
+}
+
+.content {
+	width: 500px;
+	height: 80vh;
+	box-shadow: 1px 1px 12px lightgrey;
+	font-family: "Courier New", Courier, monospace;
+}
+
+#save {
+	display: block;
+}
