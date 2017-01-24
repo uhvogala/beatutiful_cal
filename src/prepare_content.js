@@ -65,7 +65,8 @@ function newCalReady(events){
 	}
 	
 	function saveTextAsFile() {
-		  var textToWrite = document.getElementById('textArea');
+		  var textToWrite = document.getElementById('textArea').value;
+		  console.log(textToWrite);
 		  var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
 		  var fileNameToSaveAs = "newcal.ics";
 

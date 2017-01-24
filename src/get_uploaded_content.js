@@ -93,7 +93,10 @@ function parseData(text) {
 			newLine.data = values[1];
 		}
 		else {
-			last.data =  last.data + newLine.getValues()[0];
+			var lastVals = newLine.getValues()[0];
+			if (typeof lastVals != 'undefined'){
+				last.data =  last.data + lastVals;				
+			}
 		}
 		if (newLine.isNewAttribute()){
 			dataList[d] = last;
@@ -107,6 +110,7 @@ function parseData(text) {
 			d = 0;
 		}
 	}
+	console.log(eventList);
 	sortEvents(eventList);
 }
 
