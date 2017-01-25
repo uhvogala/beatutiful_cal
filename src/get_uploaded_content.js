@@ -168,8 +168,14 @@ function parseData(text) {
 		// If a new attribute starts, get attr:value pair
 		if (newLine.isNewAttribute()){
 			var values = newLine.getValues();
-			newLine.attr = values[0];
-			newLine.data = values[1];
+			
+			if (typeof values[0] != 'undefined'){
+				newLine.attr = values[0];				
+			}
+			
+			if (typeof values[0] != 'undefined'){
+				newLine.data = values[1];				
+			}
 		}
 		// If the line is a part of the last value,
 		// get the value and put it after the last.
@@ -190,7 +196,7 @@ function parseData(text) {
 		}
 		// If the current line is the first line
 		// of the event, flush dataList to events and continue.
-		if (newLine.has(/begin:/i)){
+		if (newLine.has(/begin:vevent/i)){
 			eventList[e] = dataList;
 			e++;
 			dataList = [];
@@ -217,6 +223,8 @@ function Event(event){
 	}
 
 	this.data = data;
+	this.dstart = null;
+	this.dend = null;
 	
 	//Example:
 	//this.exclude = false;

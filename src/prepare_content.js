@@ -46,7 +46,8 @@ function newCalReady(events){
 		 * 
 		 * textarr should be the content of the summary field.
 		 */
-		console.log(textarr);
+		//console.log(textarr);
+		
 		// Create new string for the SUMMARY field.
 		var newsumm = [];
 		
@@ -162,7 +163,8 @@ function newCalReady(events){
 		 */
 		
 		var textToWrite = document.getElementById('textArea').value;
-		console.log(textToWrite);
+		//console.log(textToWrite);
+		
 		var textFileAsBlob = new Blob([ textToWrite ], { type: 'text/plain' });
 		var fileNameToSaveAs = "newcal.ics";
 		
@@ -194,6 +196,14 @@ function newCalReady(events){
 		
 	// First, make the data great again
 	fixData();
+	
+	// ------------- Do things to data ----------------
+	
+	events = orderData(events);
+	
+	// ------------- Data has seen some shit ----------
+	
+	
 	// Then, flush it away.
 	giveTextFormat();
 }
