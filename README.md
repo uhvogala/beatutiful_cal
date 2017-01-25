@@ -8,3 +8,5 @@
 * Group course events by type e.g. lecture or excercise
 * Add nice menu to configure courses
 * Configurator:
+  Possibility to select which courses to include. Possibility to select which events to include inside a course. Feature which allows to set the end and start dates for the calendar. Full customization support for all values and support to add own events and details. 
+
