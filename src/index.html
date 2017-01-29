@@ -2,17 +2,37 @@
 <html>
 <link rel="stylesheet" type="text/css" href="index_style.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro|Titillium+Web" rel="stylesheet">
+<script src="manifest.js"></script>
 <script src="get_uploaded_content.js"></script>
 <script src="prepare_content.js"></script>
-<script src="order_data.js"></script>
-<body>
+<script src="common.js"></script>
+<script src="ui.js"></script>
 
-<p>Choose .ics file to configure</p>
-<div class="upload">
+
+<body>
+<div class="toolbar">
+
+<p>Choose .ics file to configure. Please use files from MyCourses.</p>
+
+<div class="bcover" id="uploader">Choose file</div>
+<input type="file" class="uploadb" accept=".ics" 
+id="icalFile" onchange="checkData(false)"/>
+
+<div class="bcover" id="submit">Submit</div>
 <div class="messages"></div>
+
 </div>
 
-<textarea class="content" id="textArea"></textarea>
+<div class="f-area">
+
+
+<!--  <textarea class="content" id="textArea"></textarea>-->
+
+</div>
+
 <button type="button" value="save" id="save">Save</button>
+
 </body>
+
 </html>

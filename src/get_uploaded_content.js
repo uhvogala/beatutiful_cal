@@ -36,37 +36,29 @@
  *            
  */
 
-function putInput() {
-	/*
-	 * Generates an upload field to the index page. Presumes that the file is 
-	 * a .ics file.
-	 */
-    var x = document.createElement("INPUT");
-    x.setAttribute("type", "file");
-    x.setAttribute("accept", ".ics");
-    x.setAttribute("onchange", "checkData()");
-    x.setAttribute("id", "icalFile");
-    // Put field to the upload div
-    $(".upload").prepend(x);
-}
+var newcal = null;
 
-function checkData() {
+function checkData(run) {
 	/*
 	 * Checks that the uploaded file is a right format then loads it. Puts
 	 * messages in the messages div.
 	 */
-	var x = document.getElementById("icalFile");;
+	$(".messages").empty();
+	$(".messages").append("Please select a file");		
+	var x = document.getElementById("icalFile");
 	var txt = "";
 	if ('files' in x) {
 		for (var i = 0; i < x.files.length; i++){
 			var file = x.files[i];
 			$(".messages").empty();
 			if (file.type == "text/calendar"){
-				$(".messages").append("<p>Upload successful</p>");	
-				loadData(file);
+				$(".messages").append("Upload successful: "+file.name);	
+				if (run == true){				
+					loadData(file);
+				}
 			}
 			else {
-				$(".messages").append("<p>wrong file type</p>");
+				$(".messages").append("Wrong file type");
 			}
 		}
 	}
@@ -82,72 +74,13 @@ function loadData(file) {
 		reader.onload = (function(theFile){
 			return function(e) {
 				// Whenever file is loaded, call parseData function
-		          parseData(e.target.result);
+		          newcal = parseData(e.target.result);
+		          makeVisible(newcal);
 		        };
 		})(file);
 		reader.readAsText(file);
 	}
 }
-
-function Line(line) {
-	/*
-	 * Defines Line class that stores raw lines from the file. Line
-	 * has prototype functions that separate the data from the string.
-	 */
-	this.value = line;
-}
-Line.prototype.has = function(subString) {
-	/*
-	 * Helper function for checking occurrences of strings in a line.
-	 * Uses regexp and returns true or false if there is a match.
-	 */
-	var patt = new RegExp(subString);
-	if (patt.test(this.value)){
-		return true;
-	}
-	return false;
-}
-Line.prototype.isNewAttribute = function() {
-	/*
-	 * Returns true if the line has an attribute name in it.
-	 * For example: DESCRIPTION:
-	 * Needed to separate multiline values.
-	 */
-	if (this.has(/.+:/i)){
-		return true;
-	}
-	return false;
-};
-Line.prototype.getValues = function(){
-	/*
-	 * Parses attribute:data pairs from the lines.
-	 * If no attribute name is found, returns only
-	 * the value.
-	 */
-	var attr = null;
-	var data = null;
-	var items = [];
-	// Find something separated by ":"
-	attr = /(.+):/i.exec(this.value);
-	if (attr){
-		// Get the value inside the regex parenthesis
-		items.push(attr[1]);
-	}
-	data = /.+:.*?(.+)/.exec(this.value);
-	if (data){
-		// Get the value inside the regex parenthesis
-		items.push(data[1]);
-	}
-	// If the line is part of the last attribute value,
-	// get the whole thing.
-	if ( ! this.isNewAttribute()) {
-		data = /.+/m.exec(this.value);
-		if (data){
-			items.push(data[0].trim());
-		}
-	}
-	return items;
-};
 
 
 function parseData(text) {
@@ -206,42 +139,7 @@ function parseData(text) {
 	
 	//console.log(eventList);
 	
-	sortEvents(eventList);
-}
-
-function Event(event){
-	/*
-	 * Class that wraps an event. If user gives some event
-	 * specific settings or data, add those attributes here.
-	 * For example, if the user wants to exclude an Event, there
-	 * should be: this.exclude = true;
-	 */
-	var data = [];
-	// Constructs the data array from the given event
-	for (var k = 0; k < event.length; k++){
-		data[event[k].attr] = event[k].data;
-	}
-
-	this.data = data;
-	this.dstart = null;
-	this.dend = null;
-	
-	//Example:
-	//this.exclude = false;
-}
-
-function Events(){
-	/*
-	 * Events class to store all Event instances. The instances
-	 * can be accessed by calling Events.all. The common calendar
-	 * settings should be added here if implemented
-	 */
-	
-	this.all = [];
-	
-	//Examples:
-	//this.dstart = someday;
-	//this.dend = someday;
+	return sortEvents(eventList);
 }
 
 function sortEvents(events){
@@ -255,13 +153,13 @@ function sortEvents(events){
 		newEvent.data;
 		eventsClass.all.push(newEvent);
 	}
-	newCalReady(eventsClass);
 	
+	return newCalReady(eventsClass);
 }
 
 /*
  * When document is ready create the page.
  */
 $(document).ready(function(){
-	putInput();
+	initUI();
 });

@@ -12,19 +12,6 @@
  */
 
 
-if (!Array.prototype.last){
-	/*
-	 * Handy method to return the last item of 
-	 * an array.
-	 */
-    Array.prototype.last = function(ind){
-    	if (typeof ind == 'undefined'){
-    		ind = 0;
-    	}
-        return this[this.length + ind - 1];
-    };
-};
-
 function newCalReady(events){
 	/*
 	 * Called by get_uploaded_content.js. The parameter
@@ -193,17 +180,28 @@ function newCalReady(events){
 		// remove the link from the DOM
 		document.body.removeChild(event.target);
 	}
+	
+	function pinEventData(){
+	
+			// Save information to the Event for easier handling
+			
+			events.doToAllEvents(function(event){
+				event.dstart = toISODate(getAttributeData(event, "DTSTART"));
+				event.dend = toISODate(getAttributeData(event, "DTEND"));
+				event.courseCode = getAttributeData(event, "CATEGORIES");
+				event.courseName = getAttributeData(event, "SUMMARY").split("\\,")[0];
+				event.type = getAttributeData(event, "SUMMARY").split("\\,").last();
+			});
+	}
+
+
 		
 	// First, make the data great again
 	fixData();
-	
-	// ------------- Do things to data ----------------
-	
-	events = orderData(events);
-	
-	// ------------- Data has seen some shit ----------
-	
+	pinEventData();
 	
 	// Then, flush it away.
 	giveTextFormat();
+	
+	return events;
 }
